@@ -1,15 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Movie from './../components/Movie';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import axios from 'axios';
-
-const SORT_OPTIONS = [
-  { value: 'download_count', label: '다운로드순' },
-  { value: 'rating', label: '평점순' },
-  { value: 'year', label: '최신순' },
-  { value: 'like_count', label: '좋아요순' },
-];
+import { getMovies, MOVIE_CATEGORY_OPTIONS, MOVIE_SORT_OPTIONS } from '../data/movies';
 
 const Page = styled.main`
   max-width: 1200px;
@@ -26,7 +19,7 @@ const TopArea = styled.div`
   align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: 48px;
+  margin-bottom: 42px;
 
   @media screen and (max-width: 700px) {
     display: block;
@@ -42,6 +35,7 @@ const TitleGroup = styled.div`
   }
 
   p {
+    max-width: 620px;
     margin-top: 8px;
     color: #777;
     font-size: 16px;
@@ -55,7 +49,23 @@ const TitleGroup = styled.div`
   }
 `;
 
-const SortBox = styled.label`
+const ControlGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  @media screen and (max-width: 700px) {
+    align-items: stretch;
+    margin-top: 18px;
+  }
+
+  @media screen and (max-width: 520px) {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+`;
+
+const SelectBox = styled.label`
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -74,8 +84,12 @@ const SortBox = styled.label`
     cursor: pointer;
   }
 
-  @media screen and (max-width: 700px) {
-    margin-top: 18px;
+  @media screen and (max-width: 520px) {
+    justify-content: space-between;
+
+    select {
+      min-width: 150px;
+    }
   }
 `;
 
@@ -101,50 +115,23 @@ const StateBox = styled.div`
   text-align: center;
 `;
 
+const MetaText = styled.p`
+  margin: -22px 0 28px;
+  color: #888;
+  font-size: 14px;
+  text-align: right;
+
+  @media screen and (max-width: 700px) {
+    margin: -8px 0 22px;
+    text-align: left;
+  }
+`;
+
 function Home() {
-  const [loading, setLoading] = useState(true);
-  const [movies, setMovies] = useState([]);
-  const [query, setQuery] = useState('download_count');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [sort, setSort] = useState('popular');
+  const [category, setCategory] = useState('all');
 
-  useEffect(() => {
-    let ignore = false;
-
-    const getMovies = async () => {
-      try {
-        setLoading(true);
-        setErrorMessage('');
-
-        const response = await axios.get('https://yts.mx/api/v2/list_movies.json', {
-          params: {
-            sort_by: query,
-            limit: 20,
-          },
-        });
-
-        const nextMovies = response.data?.data?.movies || [];
-
-        if (!ignore) {
-          setMovies(nextMovies);
-        }
-      } catch (error) {
-        if (!ignore) {
-          setMovies([]);
-          setErrorMessage('영화 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
-        }
-      } finally {
-        if (!ignore) {
-          setLoading(false);
-        }
-      }
-    };
-
-    getMovies();
-
-    return () => {
-      ignore = true;
-    };
-  }, [query]);
+  const movies = useMemo(() => getMovies({ sort, category }), [sort, category]);
 
   return (
     <Page>
@@ -155,26 +142,39 @@ function Home() {
       <TopArea>
         <TitleGroup>
           <h1>Movie List</h1>
-          <p>YTS 영화 정보를 기준으로 인기 영화 목록을 보여줍니다.</p>
+          <p>
+            외부 API 장애와 네트워크 차단에 영향받지 않도록, 포트폴리오용 영화 샘플 데이터를 안정적으로 보여줍니다.
+          </p>
         </TitleGroup>
 
-        <SortBox htmlFor="movie-sort">
-          정렬
-          <select id="movie-sort" value={query} onChange={(event) => setQuery(event.target.value)}>
-            {SORT_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </SortBox>
+        <ControlGroup>
+          <SelectBox htmlFor="movie-category">
+            장르
+            <select id="movie-category" value={category} onChange={(event) => setCategory(event.target.value)}>
+              {MOVIE_CATEGORY_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </SelectBox>
+
+          <SelectBox htmlFor="movie-sort">
+            정렬
+            <select id="movie-sort" value={sort} onChange={(event) => setSort(event.target.value)}>
+              {MOVIE_SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </SelectBox>
+        </ControlGroup>
       </TopArea>
 
-      {loading ? (
-        <StateBox>Loading...</StateBox>
-      ) : errorMessage ? (
-        <StateBox>{errorMessage}</StateBox>
-      ) : movies.length === 0 ? (
+      <MetaText>{movies.length}개의 영화가 표시됩니다.</MetaText>
+
+      {movies.length === 0 ? (
         <StateBox>표시할 영화가 없습니다.</StateBox>
       ) : (
         <MovieWrap>
@@ -184,6 +184,8 @@ function Home() {
               id={movie.id}
               movieImg={movie.medium_cover_image}
               title={movie.title}
+              year={movie.year}
+              rating={movie.rating}
               summary={movie.summary}
               genres={movie.genres}
             />

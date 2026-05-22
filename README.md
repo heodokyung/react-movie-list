@@ -1,16 +1,20 @@
 # react-movie-list
 
-React와 YTS 공개 API로 만든 영화 목록 조회 토이 프로젝트입니다. 
+React로 만든 영화 목록 포트폴리오 프로젝트입니다.
+
+기존에는 외부 영화 API(YTS)에 의존했지만, 무료 API 도메인/DNS/CORS 이슈로 GitHub Pages에서 화면이 비는 문제가 발생할 수 있어 현재는 정적 샘플 데이터 기반으로 동작합니다. 따라서 배포 환경이나 네트워크 상태와 관계없이 바로보기 화면이 안정적으로 표시됩니다.
 
 ## 주요 기능
 
-- 영화 목록 조회
-- 인기순, 평점순, 최신순, 좋아요순 정렬
-- 영화 상세 정보 조회
+- 영화 목록 표시
+- 장르 필터
+- 인기순, 평점순, 최신순, 제목순 정렬
+- 영화 상세 페이지
 - GitHub Pages 하위 경로(`/react-movie-list`) 대응
 - 모바일 반응형 카드 UI
 
 ## 바로 보기
+
 [`바로가기`](https://heodokyung.github.io/react-movie-list/)
 
 ## 실행 방법
@@ -37,7 +41,15 @@ GitHub 저장소 설정에서 아래처럼 맞춰주세요.
 3. `Settings` → `Environments` → `github-pages`
 4. Deployment branches가 제한되어 있다면 `main` 브랜치를 허용
 
-기존 `gh-pages` 브랜치 직접 배포 방식은 환경 보호 규칙과 충돌할 수 있어 사용하지 않는 것을 권장합니다.
+## 데이터 수정 위치
+
+영화 목록 데이터는 아래 파일에서 관리합니다.
+
+```txt
+src/data/movies.js
+```
+
+새 영화를 추가하려면 `LOCAL_MOVIES` 배열에 항목을 추가하면 됩니다.
 
 ## 참고
 
