@@ -1,18 +1,42 @@
 # react-movie-list
 
-## 사이트 설명
-React로 구현하고 영화 정보 API를 통해 정보를 가져와서 영화 목록을 보여줍니다.
-화면에 최적화하기 위해 반응형으로 구현되어 있습니다.
+React와 YTS 공개 API로 만든 영화 목록 조회 토이 프로젝트입니다. GitHub Pages 배포는 `gh-pages` 브랜치에 직접 푸시하지 않고, GitHub Pages 공식 Actions 배포 방식으로 처리합니다.
 
-![ezgif-3-a05c131f4f](https://user-images.githubusercontent.com/50813871/179461842-5ade0525-6e86-401d-ba2d-0a5de29cc324.gif)
+## 주요 기능
 
-## 사이트 바로가기
-<a href="https://heodokyung.github.io/react-movie-list/" target="_blank">[토이프로젝트]영화목록 정보 사이트 만들기</a>  
+- 영화 목록 조회
+- 인기순, 평점순, 최신순, 좋아요순 정렬
+- 영화 상세 정보 조회
+- GitHub Pages 하위 경로(`/react-movie-list`) 대응
+- 모바일 반응형 카드 UI
 
-## 적용기술
-1.React: React를 사용하여 구현하였습니다.  
-2.react-helmet: Coin의 상세 사이트의 이동시 Title값을 상세 정보에 맞게 변경합니다.    
-3.API 정보 : https://yts.mx/api#list_movies  
-4.axios: axios로 API 정보를 가져와서 return 합니다.    
-5.styled-components: 사이트의 스타일은 CSS-IN-JS로 적용하였습니다.  
-6.react-dom:페이지 이동을 위해 사용하였습니다.  
+## 실행 방법
+
+```bash
+npm ci
+npm start
+```
+
+## 빌드
+
+```bash
+npm run build
+```
+
+## 배포 방식
+
+이 프로젝트는 `.github/workflows/deploy.yml`을 통해 GitHub Pages에 배포합니다.
+
+GitHub 저장소 설정에서 아래처럼 맞춰주세요.
+
+1. `Settings` → `Pages`
+2. `Build and deployment` → `Source`를 `GitHub Actions`로 선택
+3. `Settings` → `Environments` → `github-pages`
+4. Deployment branches가 제한되어 있다면 `main` 브랜치를 허용
+
+기존 `gh-pages` 브랜치 직접 배포 방식은 환경 보호 규칙과 충돌할 수 있어 사용하지 않는 것을 권장합니다.
+
+## 참고
+
+- `npm run deploy`는 현재 빌드 확인용으로만 사용합니다.
+- 예전 방식이 꼭 필요하면 `npm run deploy:legacy`를 사용할 수 있지만, GitHub Pages 환경 보호 규칙에서 `gh-pages` 브랜치를 허용해야 합니다.

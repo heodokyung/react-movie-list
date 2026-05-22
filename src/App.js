@@ -3,68 +3,66 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './routes/Home';
 import Detail from './routes/Detail';
 
+const getBaseName = () => {
+  if (!process.env.PUBLIC_URL) return '/';
+
+  try {
+    return new URL(process.env.PUBLIC_URL, window.location.origin).pathname.replace(/\/$/, '') || '/';
+  } catch {
+    return process.env.PUBLIC_URL.replace(/\/$/, '') || '/';
+  }
+};
+
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
   * {
     box-sizing: border-box;
   }
 
-  html, body, div, span, applet, object, iframe,
-  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-  a, abbr, acronym, address, big, cite, code,
-  del, dfn, em, img, ins, kbd, q, s, samp,
-  small, strike, strong, sub, sup, tt, var,
-  b, u, i, center,
-  dl, dt, dd, menu, ol, ul, li,
-  fieldset, form, label, legend,
-  table, caption, tbody, tfoot, thead, tr, th, td,
-  article, aside, canvas, details, embed,
-  figure, figcaption, footer, header, hgroup,
-  main, menu, nav, output, ruby, section, summary,
-  time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
+  html {
+    font-size: 16px;
   }
-  article, aside, details, figcaption, figure,
-  footer, header, hgroup, main, menu, nav, section {
-    display: block;
-  }
-  *[hidden] {
-      display: none;
-  }
+
   body {
-    line-height: 1;
-    font-family: 'Source Sans Pro', sans-serif;
+    margin: 0;
+    min-width: 320px;
+    background: #f5f5f2;
+    color: #1f2933;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
   }
-  menu, ol, ul {
-    list-style: none;
+
+  body,
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
   }
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
+
   a {
+    color: inherit;
     text-decoration: none;
-    color:inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
   }
 `;
 
 function App() {
-  // console.log(process.env.PUBLIC_URL); => react-movie
   return (
     <>
       <GlobalStyle />
-      <Router>
+      <Router basename={getBaseName()}>
         <Routes>
-          <Route path={process.env.PUBLIC_URL + '/'} element={<Home />} />
-          <Route
-            path={process.env.PUBLIC_URL + '/movie/:id'}
-            element={<Detail />}
-          />
+          <Route path="/" element={<Home />} />
+          <Route path="/movie/:id" element={<Detail />} />
         </Routes>
       </Router>
     </>

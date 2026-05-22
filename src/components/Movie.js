@@ -2,89 +2,120 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-function Movie({ id, movieImg, title, summary, genres }) {
-	const ListEl = styled.div`
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		border: 1px solid #ddd;
-		border-radius: 8px;
-		padding: 24px 32px;
-		box-shadow: 4px 4px 24px #ddd;
-		background-color: #f8f8f8;
-	`;
+const ListEl = styled.article`
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: 20px;
+  min-height: 220px;
+  padding: 18px;
+  border: 1px solid #d8d8d2;
+  border-radius: 14px;
+  background: #fff;
+  transition:
+    border-color 0.18s ease,
+    transform 0.18s ease;
 
-	const ImgWrap = styled.div`
-		position: relative;
-		width: 150px;
-		top: -34px;
-		img {
-			width: 100%;
-			height: auto;
-			border-radius: 4px;
-		}
-		overflow: hidden;
-		@media screen and (max-width: 700px) {
-			width: 100px;
-			top: 0;
-		}
-	`;
+  &:hover {
+    border-color: #9ca3af;
+    transform: translateY(-2px);
+  }
 
-	const DetailView = styled.div`
-		width: calc(100% - 170px);
-		a {
-			display: block;
-		}
-		@media screen and (max-width: 700px) {
-			width: calc(100% - 120px);
-		}
-	`;
+  @media screen and (max-width: 520px) {
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 14px;
+    padding: 14px;
+  }
+`;
 
-	const Title = styled.p`
-		font-size: 24px;
-		font-weight: bold;
-		margin-bottom: 20px;
-	`;
+const ImgWrap = styled.div`
+  overflow: hidden;
+  align-self: flex-start;
+  border-radius: 10px;
+  background: #e5e7eb;
 
-	const Summary = styled.p`
-		font-size: 16px;
-		line-height: 20px;
-	`;
+  img {
+    width: 100%;
+    height: auto;
+  }
+`;
 
-	const SubList = styled.ul`
-		margin-top: 16px;
-		li {
-			font-size: 14px;
-		}
-		li + li {
-			margin-top: 8px;
-		}
-	`;
+const DetailView = styled.div`
+  min-width: 0;
+`;
 
-	return (
-		<ListEl>
-			<ImgWrap>
-				<img src={movieImg} alt={`${title} Cover IMAGE`} />
-			</ImgWrap>
-			<DetailView>
-				<Link to={`movie/${id}`}>
-					<Title>{title}</Title>
-					<Summary>
-						{summary.length > 200 ? `${summary.slice(0, 200)} ...` : summary}
-					</Summary>
-				</Link>
-				{genres == null ? (
-					''
-				) : (
-					<SubList>
-						{genres.map((g) => (
-							<li key={g}>- {g}</li>
-						))}
-					</SubList>
-				)}
-			</DetailView>
-		</ListEl>
-	);
+const Title = styled.h2`
+  margin: 0;
+  color: #111827;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+
+  @media screen and (max-width: 520px) {
+    font-size: 18px;
+  }
+`;
+
+const Meta = styled.p`
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 700;
+`;
+
+const Summary = styled.p`
+  margin: 14px 0 0;
+  color: #4b5563;
+  font-size: 15px;
+  line-height: 1.55;
+`;
+
+const SubList = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 4px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    color: #4b5563;
+    font-size: 12px;
+    font-weight: 700;
+  }
+`;
+
+function Movie({ id, movieImg, title, summary = '', genres, year, rating }) {
+  const shortSummary = summary.length > 170 ? `${summary.slice(0, 170)}...` : summary;
+
+  return (
+    <ListEl>
+      <ImgWrap>
+        <img src={movieImg} alt={`${title} 포스터`} loading="lazy" />
+      </ImgWrap>
+
+      <DetailView>
+        <Link to={`/movie/${id}`} aria-label={`${title} 상세 보기`}>
+          <Title>{title}</Title>
+          <Meta>
+            {year || '연도 정보 없음'} · 평점 {rating || '-'}
+          </Meta>
+          {shortSummary && <Summary>{shortSummary}</Summary>}
+        </Link>
+
+        {Array.isArray(genres) && genres.length > 0 && (
+          <SubList aria-label={`${title} 장르`}>
+            {genres.map((genre) => (
+              <li key={genre}>{genre}</li>
+            ))}
+          </SubList>
+        )}
+      </DetailView>
+    </ListEl>
+  );
 }
 
 export default Movie;
