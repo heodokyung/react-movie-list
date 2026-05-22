@@ -1,6 +1,6 @@
 # react-movie-list
 
-React와 YTS 공개 API로 만든 영화 목록 조회 토이 프로젝트입니다. GitHub Pages 배포는 `gh-pages` 브랜치에 직접 푸시하지 않고, GitHub Pages 공식 Actions 배포 방식으로 처리합니다.
+React와 YTS 공개 API로 만든 영화 목록 조회 토이 프로젝트입니다. 
 
 ## 주요 기능
 
@@ -9,6 +9,9 @@ React와 YTS 공개 API로 만든 영화 목록 조회 토이 프로젝트입니
 - 영화 상세 정보 조회
 - GitHub Pages 하위 경로(`/react-movie-list`) 대응
 - 모바일 반응형 카드 UI
+
+## 바로 보기
+[`바로가기`](https://heodokyung.github.io/react-movie-list/)
 
 ## 실행 방법
 
