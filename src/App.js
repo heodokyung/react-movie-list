@@ -1,10 +1,11 @@
 import { createGlobalStyle } from 'styled-components';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './routes/Home';
 import Detail from './routes/Detail';
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+
   * {
     box-sizing: border-box;
   }
@@ -29,42 +30,53 @@ const GlobalStyle = createGlobalStyle`
     font: inherit;
     vertical-align: baseline;
   }
+
   article, aside, details, figcaption, figure,
   footer, header, hgroup, main, menu, nav, section {
     display: block;
   }
-  *[hidden] {
-      display: none;
-  }
+
   body {
+    min-width: 320px;
     line-height: 1;
-    font-family: 'Source Sans Pro', sans-serif;
+    background: #f7f7f7;
+    color: #222;
+    font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
   }
+
   menu, ol, ul {
     list-style: none;
   }
+
   table {
     border-collapse: collapse;
     border-spacing: 0;
   }
+
   a {
+    color: inherit;
     text-decoration: none;
-    color:inherit;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  button,
+  select {
+    font: inherit;
   }
 `;
 
 function App() {
-  // console.log(process.env.PUBLIC_URL); => react-movie
   return (
     <>
       <GlobalStyle />
       <Router>
         <Routes>
-          <Route path={process.env.PUBLIC_URL + '/'} element={<Home />} />
-          <Route
-            path={process.env.PUBLIC_URL + '/movie/:id'}
-            element={<Detail />}
-          />
+          <Route path="/" element={<Home />} />
+          <Route path="/movie/:id" element={<Detail />} />
         </Routes>
       </Router>
     </>
