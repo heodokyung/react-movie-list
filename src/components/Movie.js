@@ -2,107 +2,115 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const ListEl = styled.article`
-  display: grid;
-  grid-template-columns: 128px minmax(0, 1fr);
-  gap: 20px;
-  min-height: 220px;
-  padding: 18px;
-  border: 1px solid #d8d8d2;
-  border-radius: 14px;
-  background: #fff;
+const ListEl = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 260px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 24px 32px;
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.08);
+  background-color: #f8f8f8;
   transition:
-    border-color 0.18s ease,
-    transform 0.18s ease;
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 
   &:hover {
-    border-color: #9ca3af;
     transform: translateY(-2px);
+    box-shadow: 4px 8px 24px rgba(0, 0, 0, 0.1);
   }
 
-  @media screen and (max-width: 520px) {
-    grid-template-columns: 92px minmax(0, 1fr);
-    gap: 14px;
-    padding: 14px;
+  @media screen and (max-width: 700px) {
+    min-height: auto;
+    padding: 18px;
   }
 `;
 
 const ImgWrap = styled.div`
+  position: relative;
+  top: -34px;
   overflow: hidden;
-  align-self: flex-start;
-  border-radius: 10px;
-  background: #e5e7eb;
+  width: 150px;
+  border-radius: 4px;
+  background: #eee;
 
   img {
     width: 100%;
     height: auto;
+    border-radius: 4px;
+  }
+
+  @media screen and (max-width: 700px) {
+    top: 0;
+    width: 100px;
   }
 `;
 
 const DetailView = styled.div`
-  min-width: 0;
-`;
+  width: calc(100% - 170px);
 
-const Title = styled.h2`
-  margin: 0;
-  color: #111827;
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.25;
+  a {
+    display: block;
+  }
 
-  @media screen and (max-width: 520px) {
-    font-size: 18px;
+  @media screen and (max-width: 700px) {
+    width: calc(100% - 120px);
   }
 `;
 
-const Meta = styled.p`
-  margin: 8px 0 0;
-  color: #6b7280;
-  font-size: 14px;
+const Title = styled.p`
+  margin-bottom: 18px;
+  color: #222;
+  font-size: 24px;
   font-weight: 700;
+  line-height: 1.2;
+
+  @media screen and (max-width: 700px) {
+    margin-bottom: 12px;
+    font-size: 20px;
+  }
 `;
 
 const Summary = styled.p`
-  margin: 14px 0 0;
-  color: #4b5563;
-  font-size: 15px;
-  line-height: 1.55;
+  color: #555;
+  font-size: 16px;
+  line-height: 1.45;
+
+  @media screen and (max-width: 700px) {
+    font-size: 14px;
+    line-height: 1.4;
+  }
 `;
 
 const SubList = styled.ul`
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin: 16px 0 0;
-  padding: 0;
-  list-style: none;
+  margin-top: 16px;
 
   li {
     padding: 4px 8px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #ddd;
     border-radius: 999px;
-    color: #4b5563;
-    font-size: 12px;
-    font-weight: 700;
+    background: #fff;
+    color: #666;
+    font-size: 13px;
   }
 `;
 
-function Movie({ id, movieImg, title, summary = '', genres, year, rating }) {
-  const shortSummary = summary.length > 170 ? `${summary.slice(0, 170)}...` : summary;
+function Movie({ id, movieImg, title, summary = '', genres }) {
+  const shortSummary = summary.length > 200 ? `${summary.slice(0, 200)} ...` : summary;
 
   return (
     <ListEl>
       <ImgWrap>
-        <img src={movieImg} alt={`${title} 포스터`} loading="lazy" />
+        <img src={movieImg} alt={`${title} cover`} loading="lazy" />
       </ImgWrap>
 
       <DetailView>
         <Link to={`/movie/${id}`} aria-label={`${title} 상세 보기`}>
           <Title>{title}</Title>
-          <Meta>
-            {year || '연도 정보 없음'} · 평점 {rating || '-'}
-          </Meta>
           {shortSummary && <Summary>{shortSummary}</Summary>}
         </Link>
 
