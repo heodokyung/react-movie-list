@@ -2,128 +2,89 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const ListEl = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  min-height: 260px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 24px 32px;
-  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.08);
-  background-color: #f8f8f8;
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
+function Movie({ id, movieImg, title, summary, genres }) {
+	const ListEl = styled.div`
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		border: 1px solid #ddd;
+		border-radius: 8px;
+		padding: 24px 32px;
+		box-shadow: 4px 4px 24px #ddd;
+		background-color: #f8f8f8;
+	`;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 4px 8px 24px rgba(0, 0, 0, 0.1);
-  }
+	const ImgWrap = styled.div`
+		position: relative;
+		width: 150px;
+		top: -34px;
+		img {
+			width: 100%;
+			height: auto;
+			border-radius: 4px;
+		}
+		overflow: hidden;
+		@media screen and (max-width: 700px) {
+			width: 100px;
+			top: 0;
+		}
+	`;
 
-  @media screen and (max-width: 700px) {
-    min-height: auto;
-    padding: 18px;
-  }
-`;
+	const DetailView = styled.div`
+		width: calc(100% - 170px);
+		a {
+			display: block;
+		}
+		@media screen and (max-width: 700px) {
+			width: calc(100% - 120px);
+		}
+	`;
 
-const ImgWrap = styled.div`
-  position: relative;
-  top: -34px;
-  overflow: hidden;
-  width: 150px;
-  border-radius: 4px;
-  background: #eee;
+	const Title = styled.p`
+		font-size: 24px;
+		font-weight: bold;
+		margin-bottom: 20px;
+	`;
 
-  img {
-    width: 100%;
-    height: auto;
-    border-radius: 4px;
-  }
+	const Summary = styled.p`
+		font-size: 16px;
+		line-height: 20px;
+	`;
 
-  @media screen and (max-width: 700px) {
-    top: 0;
-    width: 100px;
-  }
-`;
+	const SubList = styled.ul`
+		margin-top: 16px;
+		li {
+			font-size: 14px;
+		}
+		li + li {
+			margin-top: 8px;
+		}
+	`;
 
-const DetailView = styled.div`
-  width: calc(100% - 170px);
-
-  a {
-    display: block;
-  }
-
-  @media screen and (max-width: 700px) {
-    width: calc(100% - 120px);
-  }
-`;
-
-const Title = styled.p`
-  margin-bottom: 18px;
-  color: #222;
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1.2;
-
-  @media screen and (max-width: 700px) {
-    margin-bottom: 12px;
-    font-size: 20px;
-  }
-`;
-
-const Summary = styled.p`
-  color: #555;
-  font-size: 16px;
-  line-height: 1.45;
-
-  @media screen and (max-width: 700px) {
-    font-size: 14px;
-    line-height: 1.4;
-  }
-`;
-
-const SubList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 16px;
-
-  li {
-    padding: 4px 8px;
-    border: 1px solid #ddd;
-    border-radius: 999px;
-    background: #fff;
-    color: #666;
-    font-size: 13px;
-  }
-`;
-
-function Movie({ id, movieImg, title, summary = '', genres }) {
-  const shortSummary = summary.length > 200 ? `${summary.slice(0, 200)} ...` : summary;
-
-  return (
-    <ListEl>
-      <ImgWrap>
-        <img src={movieImg} alt={`${title} cover`} loading="lazy" />
-      </ImgWrap>
-
-      <DetailView>
-        <Link to={`/movie/${id}`} aria-label={`${title} 상세 보기`}>
-          <Title>{title}</Title>
-          {shortSummary && <Summary>{shortSummary}</Summary>}
-        </Link>
-
-        {Array.isArray(genres) && genres.length > 0 && (
-          <SubList aria-label={`${title} 장르`}>
-            {genres.map((genre) => (
-              <li key={genre}>{genre}</li>
-            ))}
-          </SubList>
-        )}
-      </DetailView>
-    </ListEl>
-  );
+	return (
+		<ListEl>
+			<ImgWrap>
+				<img src={movieImg} alt={`${title} Cover IMAGE`} />
+			</ImgWrap>
+			<DetailView>
+				<Link to={`movie/${id}`}>
+					<Title>{title}</Title>
+					<Summary>
+						{summary.length > 200 ? `${summary.slice(0, 200)} ...` : summary}
+					</Summary>
+				</Link>
+				{genres == null ? (
+					''
+				) : (
+					<SubList>
+						{genres.map((g) => (
+							<li key={g}>- {g}</li>
+						))}
+					</SubList>
+				)}
+			</DetailView>
+		</ListEl>
+	);
 }
 
 export default Movie;
