@@ -15,7 +15,7 @@ React로 만든 영화 목록 포트폴리오 프로젝트입니다.
 
 ## 바로 보기
 
-바로가기: https://heodokyung.github.io/react-movie-list/
+URL: https://heodokyung.github.io/react-movie-list/
 
 ## 실행 방법
 
